@@ -7,8 +7,8 @@ import {
 
 // const cheerio = require('react-native-cheerio')
 
-// const cheerio = require("cheerio");
-// const request = require("request");
+const cheerio = require("cheerio");
+const request = require("request");
 
 
 class Home extends Component {
@@ -51,7 +51,6 @@ class Home extends Component {
     this.onSignUp = this.onSignUp.bind(this)
     this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
-    console.log(this)
   }
 
   componentDidMount() {
@@ -79,7 +78,6 @@ class Home extends Component {
       this.setState({
         isLoading: false,
       })
-      
     }
   }
 
@@ -125,7 +123,6 @@ class Home extends Component {
 
     });
   }
-
 
   onSignUp() {
     // grab state
@@ -223,10 +220,11 @@ class Home extends Component {
       token,
       results
     } = this.state;
-    
 
-    var cheerio = require("cheerio");
-    var request = require("request");
+
+
+    // var cheerio = require("cheerio");
+    // var request = require("request");
 
     console.log("the article is: ", addLink)
 
@@ -265,6 +263,7 @@ class Home extends Component {
         });
         
         
+
       });
       // Log the results once you've looped through each of the elements found with cheerio
 
@@ -272,16 +271,12 @@ class Home extends Component {
       console.log('TITLE: ' + results[0].title)
       console.log('IMAGE: ' + results[1].image);
       console.log('--------------------------------------------');
-    })
+    });
 
 
-    console.log(this)
     console.log(results)
 
-
-
     // post request to backend
-
 
     fetch('/api/account/addarticle', {
       method: 'POST',
@@ -291,7 +286,7 @@ class Home extends Component {
 
 
       body: JSON.stringify({
-        link: addLink,
+        link: this.state.addLink,
         title: this.state.results[0],
         imageLink: this.state.results[1],
         uniqueId: token
@@ -315,6 +310,7 @@ class Home extends Component {
           })
         }
       })
+    
   }
 
 

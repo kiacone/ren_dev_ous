@@ -7,8 +7,8 @@ import {
 
 // const cheerio = require('react-native-cheerio')
 
-// const cheerio = require("cheerio");
-// const request = require("request");
+const cheerio = require("cheerio");
+const request = require("request");
 
 
 class Home extends Component {
@@ -30,7 +30,7 @@ class Home extends Component {
       signUpPassword: '',
       dashboad: '',
       addLink: '',
-      results: []
+      results:[]
 
     };
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
@@ -51,7 +51,6 @@ class Home extends Component {
     this.onSignUp = this.onSignUp.bind(this)
     this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
-    console.log(this)
   }
 
   componentDidMount() {
@@ -79,7 +78,6 @@ class Home extends Component {
       this.setState({
         isLoading: false,
       })
-      
     }
   }
 
@@ -125,7 +123,6 @@ class Home extends Component {
 
     });
   }
-
 
   onSignUp() {
     // grab state
@@ -221,68 +218,70 @@ class Home extends Component {
     const {
       addLink,
       token,
-      results
+      //results
     } = this.state;
+    console.log(this)
+    let results = [], title, image;
     
-
-    var cheerio = require("cheerio");
-    var request = require("request");
-
-    console.log("the article is: ", addLink)
-
+    
+    
+    
+    // var cheerio = require("cheerio");
+    // var request = require("request");
+    
+    var article = addLink
+    console.log("the article is: ", article)
+    
     // Make a request call to grab the HTML body from the site of your choice
-    request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
-
+    request("https://cors-anywhere.herokuapp.com/" + article, function(error, response, html) {
+    
       // Load the HTML into cheerio and save it to a variable
       // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
       var $ = cheerio.load(html);
-
+    
       // An empty array to save the data that we'll scrape
-
+    
       // Select each element in the HTML body from which you want information.
       // NOTE: Cheerio selectors function similarly to jQuery's selectors,
       // but be sure to visit the package's npm page to see how it works
-      $("head").each(function (i, body) {
-
+      $("head").each(function(i, body) {
+    
         var $ = cheerio.load(body);
-        var title = $("title").text();
-
+        title = $("title").text();
+    
         // Save these results in an object that we'll push into the results array we defined earlier
-        results.push({
-          title
-        });
-       
-      });
-
-      $("body").each(function (i, body) {
-
-        var $ = cheerio.load(body);
-        var image = $("img").attr("src")
-
-        // Save these results in an object that we'll push into the results array we defined earlier
-        results.push({
-          image
-        });
-        
         
       });
+    
+      $("body").each(function(i, body) {
+    
+        var $ = cheerio.load(body);
+        image = $("img").attr("src")
+    
+        // Save these results in an object that we'll push into the results array we defined earlier
+        
+      });
+    
+      
+      
       // Log the results once you've looped through each of the elements found with cheerio
-
+      
       console.log('--------------------------------------------');
-      console.log('TITLE: ' + results[0].title)
-      console.log('IMAGE: ' + results[1].image);
+      console.log('TITLE: ' + results[0])
+      console.log('IMAGE: ' + results[1]);
       console.log('--------------------------------------------');
-    })
-
-
-    console.log(this)
-    console.log(results)
-
-
+    });
+    console.log(title)
+    this.setState({
+      results: results.push(title)
+    });
+    this.setState({
+      results: results.push(image)
+    });
+    console.log(this.state)
+    // console.log('title: ' + results[0].title)
 
     // post request to backend
-
-
     fetch('/api/account/addarticle', {
       method: 'POST',
       headers: {
@@ -290,27 +289,24 @@ class Home extends Component {
       },
 
 
-      body: JSON.stringify({
-        link: addLink,
-        title: this.state.results[0],
-        imageLink: this.state.results[1],
-        uniqueId: token
-      }),
-    })
-      .then(res => res.json())
+      // body: JSON.stringify({
+      //   link: addLink,
+      //   title: results[0].title,
+      //   imageLink: results[1].image,
+      //   uniqueId: token
+      // }),
+    }).then(res => res.json())
       .then(json => {
         console.log('json', json)
         // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
-        // console.log('token', token)
+        console.log('token', token)
         if (json.success) {
           this.setState({
-            // addLink: '',
-            // results: [],
+            addLink: '',
           })
         } else {
           this.setState({
             // signUpError: json.message,
-
             isLoading: false,
           })
         }
