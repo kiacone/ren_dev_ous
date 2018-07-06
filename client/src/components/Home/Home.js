@@ -217,21 +217,17 @@ class Home extends Component {
     // grab state
     const {
       addLink,
-      token,
-      results
+      // token,
+      //results
     } = this.state;
 
     
-
-    
-    // var cheerio = require("cheerio");
-    // var request = require("request");
-    
-    var article = addLink
-    console.log("the article is: ", article)
+    const results = []
+    // const article = addLink
+   
     
     // Make a request call to grab the HTML body from the site of your choice
-    request("https://cors-anywhere.herokuapp.com/" + article, function(error, response, html) {
+    request("https://cors-anywhere.herokuapp.com/" + addLink, function(error, response, html) {
     
       // Load the HTML into cheerio and save it to a variable
       // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
@@ -245,37 +241,38 @@ class Home extends Component {
       $("head").each(function(i, body) {
     
         var $ = cheerio.load(body);
-        var title = $("title").text();
+        var title = $('meta[property="og:title"]').attr('content');
+        var image = $('meta[property="og:image"]').attr('content');
+        var description = $('meta[property="og:description"]').attr('content');
     
         // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
-          title
+        title
         });
-      });
-    
-      $("body").each(function(i, body) {
-    
-        var $ = cheerio.load(body);
-        var image = $("img").attr("src")
-    
-        // Save these results in an object that we'll push into the results array we defined earlier
+
         results.push({
           image
-        });
+          });
+
+          results.push({
+            description
+            });
       });
     
-      
+      console.log(results)
     
       // Log the results once you've looped through each of the elements found with cheerio
       
       console.log('--------------------------------------------');
-      console.log('TITLE: ' + results[0].title)
+      console.log("the article is: ", addLink);
+      console.log('TITLE: ' + results[0].title);
       console.log('IMAGE: ' + results[1].image);
+      console.log('DESCRIPTION: ' + results[2].description);
       console.log('--------------------------------------------');
     });
     
 
-    console.log(results)
+    
 
     // post request to backend
     fetch('/api/account/addarticle', {
@@ -283,19 +280,17 @@ class Home extends Component {
       headers: {
         'Content-Type': "application/json"
       },
-
-
       body: JSON.stringify({
         link: addLink,
-        // title: results[0],
+        title: results[0],
         // imageLink: results[1],
-        uniqueId: token
-      }),
+        //uniqueId: token
+      })
     }).then(res => res.json())
       .then(json => {
         console.log('json', json)
-        // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
-        console.log('token', token)
+        console.log('link', addLink)
+        console.log('title', results[0])
         if (json.success) {
           this.setState({
             addLink: '',
@@ -307,6 +302,7 @@ class Home extends Component {
           })
         }
       })
+      .catch(err => console.log(err))
   }
 
 
@@ -470,7 +466,33 @@ class Home extends Component {
           </div>
         </div>
         <button className='btn' onClick={this.logout}>Logout</button>
+
+        <h1>Saved Links</h1>
+
+        {/* {addLink} */}
+
+        {/* {this.state.books.length ? (
+          <List>
+            {this.state.books.map(book => (
+              <ListItem key={book._id}>
+                <Link to={"/books/" + book._id}>
+                  <strong>
+                    {book.title} by {book.author}
+                  </strong>
+                </Link>
+                <DeleteBtn onClick={() => this.deleteBook(book._id)} />
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <h3>No Results to Display</h3>
+        )} */}
+
+
+
       </div>
+
+
 
     );
   }

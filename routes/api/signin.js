@@ -1,7 +1,8 @@
 const User = require('../../models/User')
 const UserSession = require('../../models/UserSession')
 const Articles = require('../../models/Articles')
-// const cheerio = require('cheerio')
+const cheerio = require("cheerio");
+const request = require("request");``
 
 module.exports = (app) => {
 
@@ -233,12 +234,11 @@ module.exports = (app) => {
             });
     });
 
-    // Add Article
     app.post('/api/account/addarticle', (req, res, next) => {
         const { body } = req;
         console.log('body', body)
         const {
-                link,
+            link,
             title,
             imageLink,
             uniqueId
@@ -246,6 +246,8 @@ module.exports = (app) => {
         // let {
         //     email
         // } = body;
+
+        console.log(imageLink)
 
         if (!link) {
             return res.send({
@@ -305,3 +307,134 @@ module.exports = (app) => {
     
 
 };
+
+    // const results = []
+    // // Add Article
+    // app.post('/api/account/addarticle', (req, res, next) => {
+    //     const { body } = req;
+        
+    //     console.log('body', body)
+    //     const {
+    //         link,
+    //         // title,
+    //         // imageLink,
+    //         // description,
+    //         uniqueId,
+            
+    //     } = body;
+    //     // let {
+    //     //     email
+    //     // } = body;
+    //     console.log(link)
+    //     // console.log(title)
+
+
+    //     if (!link) {
+    //         return res.send({
+    //             success: false,
+    //             message: "Error: link field cannot be blank"
+    //         })
+    //     };
+
+    //     // const results = []
+    //     // const article = link
+   
+    
+    // // Make a request call to grab the HTML body from the site of your choice
+    // request("https://cors-anywhere.herokuapp.com/" + link, function(error, response, html) {
+    
+    //   // Load the HTML into cheerio and save it to a variable
+    //   // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+    //   var $ = cheerio.load(html);
+    
+    //   // An empty array to save the data that we'll scrape
+    
+    //   // Select each element in the HTML body from which you want information.
+    //   // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+    //   // but be sure to visit the package's npm page to see how it works
+    //   $("head").each(function(i, body) {
+    
+    //     const $ = cheerio.load(body);
+    //      const title = $('title').text();
+    //     //  const title = $('meta[property="og:title"]').attr('content');
+    //     //  const image = $('meta[property="og:image"]').attr('content');
+    //     //  const description = $('meta[property="og:description"]').attr('content');
+    
+    //     // Save these results in an object that we'll push into the results array we defined earlier
+    //     results.push({
+    //         title,
+    //         // image,
+    //         // description
+    //     });
+    //   });
+    
+      
+    
+    //   // Log the results once you've looped through each of the elements found with cheerio
+      
+    //   console.log('--------------------------------------------');
+    //   console.log("the article is: ", link);
+    //   console.log("the results are: ", results);
+    // //   console.log('TITLE: ' + results[0].title[0]);
+    // //   console.log('IMAGE: ' + results[1]);
+    // //   console.log('DESCRIPTION: ' + results[2]);
+    //   console.log('--------------------------------------------');
+    // });
+
+
+
+
+
+        // steps:
+        // 1. verify email doesn't already exist
+        // 2. save
+
+        // Articles.updateOne({
+        //     link: link,
+        //     title: results[0],
+        //     imageLink: results[1],
+        //     description: results[2],
+        //     uniqueId: uniqueId
+        // },
+        //     (err, previousUsers) => {
+        //         if (err) {
+        //             return res.send({
+        //                 success: false,
+        //                 message: 'Error: Server error'
+        //             })
+        //         }
+        //         // else if (previousUsers.length > 0) {
+        //         //     return res.send({
+        //         //         success: false,
+        //         //         message: 'Error: Account already exists'
+        //         //     })
+        //         // }
+
+        //         // save new user
+        //         const newArticle = new Articles()
+
+        //         newArticle.link = link;
+        //         newArticle.title = title;
+        //         newArticle.imageLink = imageLink;
+        //         newArticle.description = description;
+        //         newArticle.uniqueId = uniqueId
+
+        //         newArticle.save((err, user) => {
+        //             if (err) {
+        //                 return res.send({
+        //                     success: false,
+        //                     message: 'Error: Server error'
+        //                 })
+        //             }
+        //             return res.send({
+        //                 success: true,
+        //                 message: 'Article saved!'
+        //             });
+        //         });
+        //     });
+//     });
+
+    
+    
+
+// };
