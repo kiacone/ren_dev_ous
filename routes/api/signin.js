@@ -236,7 +236,6 @@ module.exports = (app) => {
 
     app.post('/api/account/addarticle', (req, res, next) => {
         const { body } = req;
-        console.log('body', body)
         const {
             link,
             title,
@@ -246,6 +245,10 @@ module.exports = (app) => {
         // let {
         //     email
         // } = body;
+        console.log('body:', body)
+        
+
+        // console.log('imageLink: ' + imageLink)
 
         console.log(imageLink)
 
@@ -256,23 +259,20 @@ module.exports = (app) => {
             })
         };
 
-        // steps:
-        // 1. verify email doesn't already exist
-        // 2. save
 
         Articles.updateOne({
             link: link,
-            // title: results[0],
-            // imageLink: results[1],
+            title: body.title,
+            imageLink: body.imageLink,
             uniqueId: uniqueId,
         },
             (err, previousUsers) => {
-                if (err) {
-                    return res.send({
-                        success: false,
-                        message: 'Error: Server error'
-                    })
-                }
+                // if (err) {
+                //     return res.send({
+                //         success: false,
+                //         message: 'You already saved this article!'
+                //     })
+                // }
                 // else if (previousUsers.length > 0) {
                 //     return res.send({
                 //         success: false,
@@ -303,8 +303,74 @@ module.exports = (app) => {
             });
     });
 
+    // Bring articles back to front end
     
-    
+    app.post('/api/account/addarticle', (req, res, next) => {
+        const { body } = req;
+        const {
+                link,
+            // title,
+            // imageLink,
+            // uniqueId
+        } = body;
+        // let {
+        //     email
+        // } = body;
+        console.log('body:', body)
+        
+
+        // console.log('imageLink: ' + imageLink)
+
+        // if (!link) {
+        //     return res.send({
+        //         success: false,
+        //         message: "Error: link field cannot be blank"
+        //     })
+        // };
+
+
+        Articles.updateOne({
+            link: link,
+            // title: body.title,
+            // imageLink: body.imageLink,
+            // uniqueId: uniqueId,
+        },
+            (err, previousUsers) => {
+                // if (err) {
+                //     return res.send({
+                //         success: false,
+                //         message: 'You already saved this article!'
+                //     })
+                // }
+                // else if (previousUsers.length > 0) {
+                //     return res.send({
+                //         success: false,
+                //         message: 'Error: Account already exists'
+                //     })
+                // }
+
+                // save new user
+                const newArticle = new Articles()
+
+                newArticle.link = link;
+                // newArticle.title = title;
+                // newArticle.imageLink = imageLink;
+                // newArticle.uniqueId = uniqueId
+
+                newArticle.save((err, user) => {
+                    if (err) {
+                        return res.send({
+                            success: false,
+                            message: 'Error: Server error'
+                        })
+                    }
+                    return res.send({
+                        success: true,
+                        message: 'Article Appended!'
+                    });
+                });
+            });
+    });
 
 };
 
