@@ -30,7 +30,8 @@ class Home extends Component {
       signUpPassword: '',
       dashboad: '',
       addLink: '',
-      results: []
+      results: [],
+      appendArticles: []
 
     };
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
@@ -60,7 +61,7 @@ class Home extends Component {
     if (obj && obj.token) {
       const { token } = obj
       // verify token
-      fetch('/api/account/verify?token=' + token)
+      fetch('/api/verify?token=' + token)
         .then(res => res.json())
         .then(json => {
           if (json.success) {
@@ -141,7 +142,7 @@ class Home extends Component {
     })
 
     // post request to backend
-    fetch('/api/account/signup', {
+    fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -186,7 +187,7 @@ class Home extends Component {
     })
 
     // post request to backend
-    fetch('/api/account/signin', {
+    fetch('/api/signin', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -221,8 +222,11 @@ class Home extends Component {
     const {
       addLink,
       token,
-      results
+      results,
+      // appendArticles
+
     } = this.state;
+
     
 
     var cheerio = require("cheerio");
@@ -283,7 +287,7 @@ class Home extends Component {
     // post request to backend
 
 
-    fetch('/api/account/addarticle', {
+    fetch('/api/addarticle', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
@@ -292,8 +296,8 @@ class Home extends Component {
 
       body: JSON.stringify({
         link: addLink,
-        title: this.state.results[0],
-        imageLink: this.state.results[1],
+        // title: results[0],
+        // imageLink: results[1],
         uniqueId: token
       }),
     })
@@ -304,7 +308,7 @@ class Home extends Component {
         // console.log('token', token)
         if (json.success) {
           this.setState({
-            // addLink: '',
+            addLink: '',
             // results: [],
           })
         } else {
@@ -315,8 +319,51 @@ class Home extends Component {
           })
         }
       })
+
+      this.renderArticles()
+
   }
 
+  renderArticles() {
+    // grab state
+    const {
+      appendArticles
+    } = this.state;
+    
+
+    fetch('/api/appendarticle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json"
+      },
+
+
+      body: JSON.stringify({
+        link: appendArticles,
+        
+      }),
+      
+    })
+    
+      .then(res => res.json())
+      .then(json => {
+        console.log('this json!!!!!! json', json)
+        // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
+        // console.log('token', token)
+        if (json.success) {
+          this.setState({
+            appendArticles,
+          })
+        } else {
+          this.setState({
+            // signUpError: json.message,
+
+            isLoading: false,
+          })
+        }
+      })
+
+  }
 
   logout() {
     this.setState({
@@ -327,7 +374,7 @@ class Home extends Component {
     if (obj && obj.token) {
       const { token } = obj
       // verify token
-      fetch('/api/account/logout?token=' + token)
+      fetch('/api/logout?token=' + token)
         .then(res => res.json())
         .then(json => {
           if (json.success) {

@@ -6,7 +6,7 @@ const Articles = require('../../models/Articles')
 module.exports = (app) => {
 
     // Sign up
-    app.post('/api/account/signup', (req, res, next) => {
+    app.post('/api/signup', (req, res, next) => {
         const { body } = req;
         console.log('body', body)
         const {
@@ -92,7 +92,7 @@ module.exports = (app) => {
     });
 
     // Sign in
-    app.post('/api/account/signin', (req, res, next) => {
+    app.post('/api/signin', (req, res, next) => {
         const { body } = req;
         const {
 
@@ -165,7 +165,7 @@ module.exports = (app) => {
     });
 
     // Verify
-    app.get('/api/account/verify', (req, res, next) => {
+    app.get('/api/verify', (req, res, next) => {
         // get the token
         const { query } = req;
         const { token } = query;
@@ -205,7 +205,7 @@ module.exports = (app) => {
     });
 
     // Logout
-    app.get('/api/account/logout', (req, res, next) => {
+    app.get('/api/logout', (req, res, next) => {
         // Get the token
         const { query } = req;
         const { token } = query;
@@ -234,12 +234,12 @@ module.exports = (app) => {
     });
 
     // Add Article
-    app.post('/api/account/addarticle', (req, res, next) => {
+    app.post('/api/addarticle', (req, res, next) => {
         const { body } = req;
         const {
                 link,
-            title,
-            imageLink,
+            // title,
+            // imageLink,
             uniqueId
         } = body;
         // let {
@@ -258,82 +258,13 @@ module.exports = (app) => {
         };
 
 
-        Articles.updateOne({
-            link: link,
-            title: body.title,
-            imageLink: body.imageLink,
-            uniqueId: uniqueId,
-        },
-            (err, previousUsers) => {
-                // if (err) {
-                //     return res.send({
-                //         success: false,
-                //         message: 'You already saved this article!'
-                //     })
-                // }
-                // else if (previousUsers.length > 0) {
-                //     return res.send({
-                //         success: false,
-                //         message: 'Error: Account already exists'
-                //     })
-                // }
-
-                // save new user
-                const newArticle = new Articles()
-
-                newArticle.link = link;
-                newArticle.title = title;
-                newArticle.imageLink = imageLink;
-                newArticle.uniqueId = uniqueId
-
-                newArticle.save((err, user) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        })
-                    }
-                    return res.send({
-                        success: true,
-                        message: 'Article saved!'
-                    });
-                });
-            });
-    });
-
-    // Bring articles back to front end
-    
-    app.post('/api/account/addarticle', (req, res, next) => {
-        const { body } = req;
-        const {
-                link,
-            // title,
-            // imageLink,
-            // uniqueId
-        } = body;
-        // let {
-        //     email
-        // } = body;
-        console.log('body:', body)
+        // Articles.updateOne({
+        //     link: link,
+        //     title: body.title,
+        //     imageLink: body.imageLink,
+        //     uniqueId: uniqueId,
+        // },
         
-
-        // console.log('imageLink: ' + imageLink)
-
-        // if (!link) {
-        //     return res.send({
-        //         success: false,
-        //         message: "Error: link field cannot be blank"
-        //     })
-        // };
-
-
-        Articles.updateOne({
-            link: link,
-            // title: body.title,
-            // imageLink: body.imageLink,
-            // uniqueId: uniqueId,
-        },
-            (err, previousUsers) => {
                 // if (err) {
                 //     return res.send({
                 //         success: false,
@@ -353,7 +284,7 @@ module.exports = (app) => {
                 newArticle.link = link;
                 // newArticle.title = title;
                 // newArticle.imageLink = imageLink;
-                // newArticle.uniqueId = uniqueId
+                newArticle.uniqueId = uniqueId
 
                 newArticle.save((err, user) => {
                     if (err) {
@@ -364,10 +295,31 @@ module.exports = (app) => {
                     }
                     return res.send({
                         success: true,
-                        message: 'Article Appended!'
+                        message: 'Article saved!'
                     });
                 });
-            });
+        
+    });
+
+    // Bring articles back to front end
+    
+    app.post('/api/appendarticle', (req, res) => {
+        // const { body } = req;
+        // const {
+        //         link,
+        // } = body;
+
+        
+       
+        // console.log('body:', body)
+
+        Articles
+        .find(req.query)
+        // .sort({link})
+        .then(Articles => res.json(Articles))
+        .catch(err => res.status(422).json(err))
+        // console.log(res)
+        
     });
 
 };
