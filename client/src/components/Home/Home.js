@@ -7,8 +7,8 @@ import {
 
 // const cheerio = require('react-native-cheerio')
 
-// const cheerio = require("cheerio");
-// const request = require("request");
+const cheerio = require("cheerio");
+const request = require("request");
 
 
 class Home extends Component {
@@ -34,6 +34,7 @@ class Home extends Component {
       appendArticles: []
 
     };
+
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
 
     this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
@@ -80,7 +81,7 @@ class Home extends Component {
       this.setState({
         isLoading: false,
       })
-      
+
     }
   }
 
@@ -222,15 +223,14 @@ class Home extends Component {
     const {
       addLink,
       token,
-      results,
-      // appendArticles
-
+      results
     } = this.state;
 
-    
+    const self = this
 
-    var cheerio = require("cheerio");
-    var request = require("request");
+
+
+
 
     console.log("the article is: ", addLink)
 
@@ -255,7 +255,7 @@ class Home extends Component {
         results.push({
           title
         });
-       
+
       });
 
       $("body").each(function (i, body) {
@@ -267,8 +267,8 @@ class Home extends Component {
         results.push({
           image
         });
-        
-        
+
+
       });
       // Log the results once you've looped through each of the elements found with cheerio
 
@@ -276,16 +276,28 @@ class Home extends Component {
       console.log('TITLE: ' + results[0].title)
       console.log('IMAGE: ' + results[1].image);
       console.log('--------------------------------------------');
+      self.postToDb()
     })
 
-
-    console.log(this)
-    console.log(results)
+  }
 
 
+  // console.log(this.state)
+  // console.log(results)
 
-    // post request to backend
 
+
+  // post request to backend
+
+  postToDb() {
+
+    const {
+      addLink,
+      token,
+      results,
+      // appendArticles
+
+    } = this.state;
 
     fetch('/api/addarticle', {
       method: 'POST',
@@ -296,14 +308,14 @@ class Home extends Component {
 
       body: JSON.stringify({
         link: addLink,
-        // title: results[0],
-        // imageLink: results[1],
+        title: results[0].title,
+        imageLink: results[1].image,
         uniqueId: token
       }),
     })
       .then(res => res.json())
       .then(json => {
-        console.log('json', json)
+        // console.log('json', json)
         // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
         // console.log('token', token)
         if (json.success) {
@@ -320,16 +332,17 @@ class Home extends Component {
         }
       })
 
-      this.renderArticles()
+    this.renderArticles()
 
   }
 
+
   renderArticles() {
     // grab state
-    const {
-      appendArticles
-    } = this.state;
-    
+    // let {
+    //   appendArticles
+    // } = this.state;
+
 
     fetch('/api/appendarticle', {
       method: 'POST',
@@ -337,32 +350,33 @@ class Home extends Component {
         'Content-Type': "application/json"
       },
 
-
-      body: JSON.stringify({
-        link: appendArticles,
-        
-      }),
-      
     })
-    
       .then(res => res.json())
       .then(json => {
-        console.log('this json!!!!!! json', json)
-        // this is the unique session id. can this be used to find the unique user id? do i need to find that directly?
-        // console.log('token', token)
-        if (json.success) {
-          this.setState({
-            appendArticles,
-          })
+        // console.log('this json!!!!!! json', json)
+        // appendArticles = json
+        // json = JSON.stringify(json)
+        console.log('here!!!!' + json)
+        if (json) {
+
+          console.log("success")
+          this.setState({appendArticles: json})
+
+          console.log(this.state)
         } else {
           this.setState({
             // signUpError: json.message,
-
             isLoading: false,
           })
         }
+
+
       })
 
+    // console.log(this.state)
+
+
+    console.log("articles: ", this.state)
   }
 
   logout() {
@@ -520,6 +534,9 @@ class Home extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
+                
+                {this.state.appendArticles.map(article => article.link)}
+                
               </div>
             </div>
           </div>
