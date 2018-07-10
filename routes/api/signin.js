@@ -240,6 +240,7 @@ module.exports = (app) => {
                 link,
             title,
             imageLink,
+            description,
             uniqueId
         } = body;
         // let {
@@ -284,6 +285,7 @@ module.exports = (app) => {
                 newArticle.link = link;
                 newArticle.title = title;
                 newArticle.imageLink = imageLink;
+                newArticle.description = description;
                 newArticle.uniqueId = uniqueId
 
                 newArticle.save((err, user) => {
