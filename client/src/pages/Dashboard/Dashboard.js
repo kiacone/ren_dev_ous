@@ -67,11 +67,15 @@ class Dashboard extends Component {
     // grab state
     const {
       addLink,
-      token,
+      // token,
       results
     } = this.state;
 
     const self = this
+
+
+
+
 
     console.log("the article is: ", addLink)
 
@@ -122,12 +126,16 @@ class Dashboard extends Component {
 
   }
 
+
   // console.log(this.state)
   // console.log(results)
+
+
 
   // post request to backend
 
   postToDb() {
+
     const {
       addLink,
       token,
@@ -141,6 +149,8 @@ class Dashboard extends Component {
       headers: {
         'Content-Type': "application/json"
       },
+
+
       body: JSON.stringify({
         link: addLink,
         title: results[0].title,
@@ -168,13 +178,16 @@ class Dashboard extends Component {
       })
 
     this.renderArticles()
+
   }
+
 
   renderArticles() {
     // grab state
     // let {
     //   appendArticles
     // } = this.state;
+
 
     fetch('/api/appendarticle', {
       method: 'POST',
@@ -201,9 +214,13 @@ class Dashboard extends Component {
             isLoading: false,
           })
         }
+
+
       })
 
     // console.log(this.state)
+
+
     console.log("articles: ", this.state)
   }
 
@@ -266,7 +283,7 @@ class Dashboard extends Component {
         <div className="row">
           <div className="col s12">
             <div className="card blue-grey darken-1">
-              <div className="card-content white-text">
+            <div className="card-content white-text">
                 <span className="card-title">Add an Article</span>
 
                 <input
@@ -277,9 +294,11 @@ class Dashboard extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
+                {this.state.appendArticles.map(article =>
                 
-                {this.state.appendArticles.map(article => article.title)}
-                
+                  <div>
+                  <img src={article.imageLink}/>
+                  <a href={article.link} target="_blank">{article.title}</a></div>)}
               </div>
             </div>
           </div>
