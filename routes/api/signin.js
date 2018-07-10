@@ -238,8 +238,8 @@ module.exports = (app) => {
         const { body } = req;
         const {
                 link,
-            // title,
-            // imageLink,
+            title,
+            imageLink,
             uniqueId
         } = body;
         // let {
@@ -282,8 +282,8 @@ module.exports = (app) => {
                 const newArticle = new Articles()
 
                 newArticle.link = link;
-                // newArticle.title = title;
-                // newArticle.imageLink = imageLink;
+                newArticle.title = title;
+                newArticle.imageLink = imageLink;
                 newArticle.uniqueId = uniqueId
 
                 newArticle.save((err, user) => {
