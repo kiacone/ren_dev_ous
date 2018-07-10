@@ -548,7 +548,7 @@ class Home extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
-                {this.state.appendArticles.map(article =>
+                {this.state.appendArticles.slice(0).reverse().map(article =>
 
                   <div className='row'>
                     <div className='col s6 m3'>
