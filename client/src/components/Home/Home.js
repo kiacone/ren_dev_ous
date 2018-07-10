@@ -222,7 +222,7 @@ class Home extends Component {
     // grab state
     const {
       addLink,
-      token,
+      // token,
       results
     } = this.state;
 
@@ -321,7 +321,7 @@ class Home extends Component {
         if (json.success) {
           this.setState({
             addLink: '',
-            // results: [],
+            results: [],
           })
         } else {
           this.setState({
@@ -534,10 +534,13 @@ class Home extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
+                {this.state.appendArticles.map(article =>
                 
-                {this.state.appendArticles.map(article => article.link)}
-                
+                  <div>
+                  <img src={article.imageLink}/>
+                  <a href={article.link} target="_blank">{article.title}</a></div>)}
               </div>
+              
             </div>
           </div>
         </div>
