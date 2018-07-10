@@ -5,8 +5,6 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 
-// const cheerio = require('react-native-cheerio')
-
 const cheerio = require("cheerio");
 const request = require("request");
 
@@ -17,17 +15,10 @@ class Home extends Component {
 
     this.state = {
       isLoading: true,
-      // split into different components?
       token: '',
-      // split into different components?
-      signUpError: '',
       signInError: '',
       signInEmail: '',
       signInPassword: '',
-      signUpFirstName: '',
-      signUpLastName: '',
-      signUpEmail: '',
-      signUpPassword: '',
       dashboad: '',
       addLink: '',
       results: [],
@@ -39,18 +30,9 @@ class Home extends Component {
 
     this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
 
-    this.onTextBoxChangeSignUpEmail = this.onTextBoxChangeSignUpEmail.bind(this);
-
-    this.onTextBoxChangeSignUpPassword = this.onTextBoxChangeSignUpPassword.bind(this);
-
-    this.onTextBoxChangeSignUpFirstName = this.onTextBoxChangeSignUpFirstName.bind(this);
-
-    this.onTextBoxChangeSignUpLastName = this.onTextBoxChangeSignUpLastName.bind(this);
-
     this.onTextBoxChangeAddLink = this.onTextBoxChangeAddLink.bind(this);
 
     this.onSignIn = this.onSignIn.bind(this)
-    this.onSignUp = this.onSignUp.bind(this)
     this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
     console.log(this)
@@ -97,82 +79,11 @@ class Home extends Component {
     });
   }
 
-  onTextBoxChangeSignUpEmail(event) {
-    this.setState({
-      signUpEmail: event.target.value
-    });
-  }
-
-  onTextBoxChangeSignUpPassword(event) {
-    this.setState({
-      signUpPassword: event.target.value
-    });
-  }
-
-  onTextBoxChangeSignUpFirstName(event) {
-    this.setState({
-      signUpFirstName: event.target.value
-    });
-  }
-
-  onTextBoxChangeSignUpLastName(event) {
-    this.setState({
-      signUpLastName: event.target.value
-    });
-  }
-
   onTextBoxChangeAddLink(event) {
     this.setState({
       addLink: event.target.value
 
     });
-  }
-
-
-  onSignUp() {
-    // grab state
-    const {
-      signUpFirstName,
-      signUpLastName,
-      signUpEmail,
-      signUpPassword,
-    } = this.state;
-
-    this.setState({
-      isLoading: true,
-    })
-
-    // post request to backend
-    fetch('/api/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
-      body: JSON.stringify({
-        firstName: signUpFirstName,
-        lastName: signUpLastName,
-        email: signUpEmail,
-        password: signUpPassword
-      }),
-    }).then(res => res.json())
-      .then(json => {
-        console.log('json', json)
-        if (json.success) {
-          this.setState({
-            signUpError: json.message,
-            isLoading: false,
-            signUpEmail: '',
-            signUpPassword: '',
-            signUpFirstName: '',
-            signUpLastName: '',
-          })
-        } else {
-          this.setState({
-            signUpError: json.message,
-            isLoading: false,
-          })
-        }
-      })
   }
 
   onSignIn() {
@@ -228,10 +139,6 @@ class Home extends Component {
 
     const self = this
 
-
-
-
-
     console.log("the article is: ", addLink)
 
     // Make a request call to grab the HTML body from the site of your choice
@@ -281,16 +188,12 @@ class Home extends Component {
 
   }
 
-
   // console.log(this.state)
   // console.log(results)
-
-
 
   // post request to backend
 
   postToDb() {
-
     const {
       addLink,
       token,
@@ -304,8 +207,6 @@ class Home extends Component {
       headers: {
         'Content-Type': "application/json"
       },
-
-
       body: JSON.stringify({
         link: addLink,
         title: results[0].title,
@@ -321,7 +222,7 @@ class Home extends Component {
         if (json.success) {
           this.setState({
             addLink: '',
-            // results: [],
+            results: [],
           })
         } else {
           this.setState({
@@ -333,16 +234,13 @@ class Home extends Component {
       })
 
     this.renderArticles()
-
   }
-
 
   renderArticles() {
     // grab state
     // let {
     //   appendArticles
     // } = this.state;
-
 
     fetch('/api/appendarticle', {
       method: 'POST',
@@ -369,13 +267,9 @@ class Home extends Component {
             isLoading: false,
           })
         }
-
-
       })
 
     // console.log(this.state)
-
-
     console.log("articles: ", this.state)
   }
 
@@ -395,7 +289,6 @@ class Home extends Component {
             this.setState({
               token: '',
               signInError: '',
-              signUpError: '',
               // could also be token: token
               isLoading: false,
             })
@@ -403,7 +296,6 @@ class Home extends Component {
             this.setState({
               isLoading: false,
               signInError: '',
-              signUpError: '',
             })
           }
         });
@@ -411,7 +303,6 @@ class Home extends Component {
       this.setState({
         isLoading: false,
         signInError: '',
-        signUpError: '',
       })
     }
   }
@@ -423,11 +314,6 @@ class Home extends Component {
       signInError,
       signInEmail,
       signInPassword,
-      signUpFirstName,
-      signUpLastName,
-      signUpEmail,
-      signUpPassword,
-      signUpError,
       addLink,
       // uniqueId
     } = this.state;
@@ -467,52 +353,8 @@ class Home extends Component {
                 </div>
               </div>
             </div>
-
-            <br />
-            <div>
-              <div className="row">
-                <div className="col s12">
-                  <div className="card blue-grey darken-1">
-                    <div className="card-content white-text">
-                      {
-                        (signUpError) ? (
-                          <p>{signUpError}</p>
-                        ) : (null)
-                      }
-                      <span className="card-title">Sign Up</span>
-                      <input
-                        type="text"
-                        placeholder="First Name"
-                        value={signUpFirstName}
-                        onChange={this.onTextBoxChangeSignUpFirstName} />
-                      <br /><br />
-                      <input
-                        type="text"
-                        placeholder="Last Name"
-                        value={signUpLastName}
-                        onChange={this.onTextBoxChangeSignUpLastName} />
-                      <br /><br />
-                      <input
-                        type="email"
-                        placeholder="Email"
-                        value={signUpEmail}
-                        onChange={this.onTextBoxChangeSignUpEmail} />
-                      <br /><br />
-                      <input
-                        type="password"
-                        placeholder="Password"
-                        value={signUpPassword}
-                        onChange={this.onTextBoxChangeSignUpPassword} />
-                      <br /><br />
-                      <button className='btn' onClick={this.onSignUp}>Sign Up</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
-        </div>
       )
     }
 
@@ -535,7 +377,7 @@ class Home extends Component {
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
                 
-                {this.state.appendArticles.map(article => article.link)}
+                {this.state.appendArticles.map(article => article.title)}
                 
               </div>
             </div>
