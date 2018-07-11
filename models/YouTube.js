@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const ArticlesSchema = new mongoose.Schema({
+const YouTubeSchema = new mongoose.Schema({
   title: {
     type: String,
     default: ''
@@ -10,10 +10,6 @@ const ArticlesSchema = new mongoose.Schema({
     default: ''
   },
   link: {
-    type: String,
-    default: ''  
-  },
-    description: {
     type: String,
     default: ''  
   },
@@ -28,4 +24,4 @@ const ArticlesSchema = new mongoose.Schema({
   
 });
 
-module.exports = mongoose.model('Articles', ArticlesSchema);
+module.exports = mongoose.model('YouTube', YouTubeSchema);

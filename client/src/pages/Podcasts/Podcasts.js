@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import DashboardNav from "../../components/DashboardNav";
 
-class Books extends Component {
+class Podcasts extends Component {
   render(){
     return (
       <div>
       <DashboardNav/>
       <div className='container'>
-        <h1 className='center-align'>Books</h1>
+        <h1 className='center-align'>Podcasts</h1>
       </div>
       </div>
     );
   }
 }
 
-export default Books
+export default Podcasts

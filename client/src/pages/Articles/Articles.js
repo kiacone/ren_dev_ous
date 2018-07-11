@@ -9,7 +9,17 @@ import DashboardNav from "../../components/DashboardNav";
 const cheerio = require("cheerio");
 const request = require("request");
 
-class Dashboard extends Component {
+// const imageStyle = {
+//   height: '200px',
+//   width: '200px',
+//   padding: '2px'
+// }
+
+const descriptionTextStyle = {
+  color: 'black',
+}
+
+class Articles extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,7 +34,6 @@ class Dashboard extends Component {
 
     this.onTextBoxChangeAddLink = this.onTextBoxChangeAddLink.bind(this);
     this.onAddLink = this.onAddLink.bind(this)
-    this.logout = this.logout.bind(this)
     // console.log(this)
   }
 
@@ -60,7 +69,6 @@ class Dashboard extends Component {
   onTextBoxChangeAddLink(event) {
     this.setState({
       addLink: event.target.value
-
     });
   }
 
@@ -74,11 +82,7 @@ class Dashboard extends Component {
 
     const self = this
 
-
-
-
-
-    console.log("the article is: ", addLink)
+    // console.log("the article is: ", addLink)
 
     // Make a request call to grab the HTML body from the site of your choice
     request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
@@ -92,46 +96,37 @@ class Dashboard extends Component {
       // Select each element in the HTML body from which you want information.
       // NOTE: Cheerio selectors function similarly to jQuery's selectors,
       // but be sure to visit the package's npm page to see how it works
-      $("head").each(function (i, body) {
+      $("head").each(function(i, body) {
 
         var $ = cheerio.load(body);
-        var title = $("title").text();
+        var title = $('meta[property="og:title"]').attr('content');
+        var image = $('meta[property="og:image"]').attr('content');
+        var description = $('meta[property="og:description"]').attr('content');
 
         // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
           title
         });
 
-      });
-
-      $("body").each(function (i, body) {
-
-        var $ = cheerio.load(body);
-        var image = $("img").attr("src")
-
-        // Save these results in an object that we'll push into the results array we defined earlier
         results.push({
           image
         });
 
-
+        results.push({
+          description
+        });
       });
+
       // Log the results once you've looped through each of the elements found with cheerio
 
       console.log('--------------------------------------------');
       console.log('TITLE: ' + results[0].title)
       console.log('IMAGE: ' + results[1].image);
+      console.log('DESCRIPTION: ' + results[2].description);
       console.log('--------------------------------------------');
       self.postToDb()
     })
-
   }
-
-
-  // console.log(this.state)
-  // console.log(results)
-
-
 
   // post request to backend
 
@@ -141,8 +136,6 @@ class Dashboard extends Component {
       addLink,
       token,
       results,
-      // appendArticles
-
     } = this.state;
 
     fetch('/api/addarticle', {
@@ -150,12 +143,11 @@ class Dashboard extends Component {
       headers: {
         'Content-Type': "application/json"
       },
-
-
       body: JSON.stringify({
         link: addLink,
         title: results[0].title,
         imageLink: results[1].image,
+        description: results[2].description,
         uniqueId: token
       }),
     })
@@ -171,43 +163,25 @@ class Dashboard extends Component {
           })
         } else {
           this.setState({
-            // signUpError: json.message,
-
             isLoading: false,
           })
         }
       })
-
     this.renderArticles()
-
   }
 
-
   renderArticles() {
-    // grab state
-    // let {
-    //   appendArticles
-    // } = this.state;
-
-
     fetch('/api/appendarticle', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
       },
-
     })
       .then(res => res.json())
       .then(json => {
-        // console.log('this json!!!!!! json', json)
-        // appendArticles = json
-        // json = JSON.stringify(json)
-        console.log('here!!!!' + json)
         if (json) {
-
           console.log("success")
-          this.setState({appendArticles: json})
-
+          this.setState({ appendArticles: json })
           console.log(this.state)
         } else {
           this.setState({
@@ -215,50 +189,8 @@ class Dashboard extends Component {
             isLoading: false,
           })
         }
-
-
       })
-
-    // console.log(this.state)
-
-
     console.log("articles: ", this.state)
-  }
-
-  logout() {
-    this.setState({
-      isLoading: true,
-    })
-    const obj = getFromStorage('the_main_app')
-
-    if (obj && obj.token) {
-      const { token } = obj
-      // verify token
-      fetch('/api/logout?token=' + token)
-        .then(res => res.json())
-        .then(json => {
-          if (json.success) {
-            this.setState({
-              token: '',
-              signInError: '',
-              // could also be token: token
-              isLoading: false,
-              toHome: true,
-            })
-          } else {
-            this.setState({
-              isLoading: false,
-              signInError: '',
-            })
-          }
-        });
-    } else {
-      this.setState({
-        isLoading: false,
-        signInError: '',
-        toHome: true,
-      })
-    }
   }
 
   render() {
@@ -266,7 +198,6 @@ class Dashboard extends Component {
       isLoading,
       token,
       addLink,
-      // uniqueId
     } = this.state;
 
     if (isLoading) {
@@ -280,13 +211,55 @@ class Dashboard extends Component {
     if (token) {
 
       return (
-        <div>
+       <div>
           <DashboardNav/>
-        <div className='container'>
-          <h1 className='center-align'>Dashboard</h1>
           
+          <div className='container'>
+        <h1 className='center-align'>My Articles</h1>
+        <div className="row">
+          <div className="col s12">
+            <div className="card blue-grey darken-1">
+              <div className="card-content white-text">
+                <span className="card-title">Add an Article</span>
+
+                <input
+                  type="text"
+                  placeholder="Add Link"
+                  value={addLink}
+                  onChange={this.onTextBoxChangeAddLink} />
+                <br /><br />
+                <button className='btn' onClick={this.onAddLink}>Save Article</button>
+                <br /><br />
+                {this.state.appendArticles.slice(0).reverse().map(article =>
+
+                  <div className='row'>
+                    <div className='col s12'>
+                      <div className='card'>
+                        <div className='card-image'>
+                          <img src={article.imageLink} alt="placeholder" />
+                          <span className='card-title'>{article.title}</span>
+                        </div>
+                        <div className='card-content'>
+                          <p style={descriptionTextStyle}>{article.description}</p>
+                        </div>
+                        <div className='card-action'>
+                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
+                        </div>
+                        {/* <div className='card-action'>
+                          <a href='#'>Delete Article</a>
+                        </div> */}
+                      </div>
+                    </div>
+                  </div>
+
+                )}
+              </div>
+
+            </div>
+          </div>
         </div>
-        </div>
+      </div>
+      </div>
       )
 
     }
@@ -297,4 +270,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default Articles;

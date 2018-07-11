@@ -4,8 +4,9 @@ import {
   setInStorage,
   getFromStorage,
 } from '../../utils/storage';
-
 import { Redirect } from 'react-router-dom'
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 class Home extends Component {
   constructor(props) {
@@ -18,14 +19,14 @@ class Home extends Component {
       signInEmail: '',
       signInPassword: '',
       toDashboard: false,
+      addLink: '',
+      results: [],
+      appendArticles: []
     };
 
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
-
     this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
-
     this.onSignIn = this.onSignIn.bind(this)
-    // console.log(this)
   }
 
   componentDidMount() {
@@ -33,6 +34,7 @@ class Home extends Component {
 
     if (obj && obj.token) {
       const { token } = obj
+      
       // verify token
       fetch('/api/verify?token=' + token)
         .then(res => res.json())
@@ -40,7 +42,6 @@ class Home extends Component {
           if (json.success) {
             this.setState({
               token,
-              // could also be token: token
               isLoading: false,
             })
           } else {
@@ -53,7 +54,6 @@ class Home extends Component {
       this.setState({
         isLoading: false,
       })
-
     }
   }
 
@@ -79,7 +79,6 @@ class Home extends Component {
 
     this.setState({
       isLoading: true,
-      toDashboard: true
     })
 
     // post request to backend
@@ -103,15 +102,39 @@ class Home extends Component {
             signInPassword: '',
             signInEmail: '',
             token: json.token,
+            toDashboard: true
           })
         } else {
           this.setState({
             signInError: json.message,
             isLoading: false,
-            toDashboard: true
           })
         }
       })
+      this.renderArticles();
+  }
+
+  renderArticles() {
+    fetch('/api/appendarticle', {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json"
+      },
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json) {
+          console.log("success")
+          this.setState({ appendArticles: json })
+          console.log(this.state)
+        } else {
+          this.setState({
+            // signUpError: json.message,
+            isLoading: false,
+          })
+        }
+      })
+    console.log("articles: ", this.state)
   }
 
   render() {
@@ -131,8 +154,12 @@ class Home extends Component {
     if (this.state.toDashboard === true) {
       return <Redirect to='/dashboard' />
     }
-    
+
+    if (!token) {
+
       return (
+        <div>
+        <Header/>
         <div className='container'>
           <div className="row">
             <div className="col s12">
@@ -162,7 +189,15 @@ class Home extends Component {
             </div>
             </div>
           </div>
+          <Footer/>
+          </div>
       )
+
+    }
+    
+    return (
+      "There is a token."
+    )
   }
 }
 

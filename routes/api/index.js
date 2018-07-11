@@ -1,7 +1,6 @@
 const User = require('../../models/User')
 const UserSession = require('../../models/UserSession')
 const Articles = require('../../models/Articles')
-// const cheerio = require('cheerio')
 
 module.exports = (app) => {
 
@@ -45,8 +44,6 @@ module.exports = (app) => {
                 message: "Error: password cannot be blank"
             });
         }
-
-        console.log('here');
 
         email = email.toLowerCase();
 
@@ -95,7 +92,6 @@ module.exports = (app) => {
     app.post('/api/signin', (req, res, next) => {
         const { body } = req;
         const {
-
             password
         } = body;
         let {
@@ -196,12 +192,6 @@ module.exports = (app) => {
                 })
             }
         });
-
-
-
-
-
-
     });
 
     // Logout
@@ -240,6 +230,7 @@ module.exports = (app) => {
                 link,
             title,
             imageLink,
+            description,
             uniqueId
         } = body;
         // let {
@@ -284,6 +275,7 @@ module.exports = (app) => {
                 newArticle.link = link;
                 newArticle.title = title;
                 newArticle.imageLink = imageLink;
+                newArticle.description = description;
                 newArticle.uniqueId = uniqueId
 
                 newArticle.save((err, user) => {
@@ -302,17 +294,7 @@ module.exports = (app) => {
     });
 
     // Bring articles back to front end
-    
     app.post('/api/appendarticle', (req, res) => {
-        // const { body } = req;
-        // const {
-        //         link,
-        // } = body;
-
-        
-       
-        // console.log('body:', body)
-
         Articles
         .find(req.query)
         // .sort({link})

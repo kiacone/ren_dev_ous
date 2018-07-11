@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import 'whatwg-fetch';
 import { getFromStorage } from '../../utils/storage';
 import { Redirect } from 'react-router-dom'
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 class SignUp extends Component {
   constructor(props) {
@@ -126,7 +128,6 @@ class SignUp extends Component {
           this.setState({
             signUpError: json.message,
             isLoading: false,
-            toHome: true,
           })
         }
       })
@@ -151,7 +152,11 @@ class SignUp extends Component {
       return <Redirect to='/' />
     }
 
+    if (!token) {
+
     return (
+      <div>
+      <Header/>
     <div className='container'>
       <div className="row">
         <div className="col s12">
@@ -193,7 +198,17 @@ class SignUp extends Component {
         </div>
       </div>
     </div>
-    );
+    <Footer/>
+    </div>
+    )
+  }
+
+    return (
+      "There is a token."
+    )
+
+
+
   }
 }
 
