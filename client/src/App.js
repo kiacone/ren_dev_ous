@@ -3,9 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-// import Saved from "./Saved/Saved";
-// import NoMatch from "./pages/NoMatch";
-// import Nav from "./components/Nav";
+import HelloWorld from "./components/HelloWorld/HelloWorld";
 
 const App = () => (
   <Router>
@@ -13,8 +11,7 @@ const App = () => (
       <Header />
       <Switch>
         <Route exact path="/" component={Home} />
-        {/* <Route exact path="/saved" component={Saved} />
-        <Route component={NoMatch} /> */}
+        <Route path = "/helloworld/:id" component={HelloWorld} />
       </Switch>
       <Footer />
     </div>

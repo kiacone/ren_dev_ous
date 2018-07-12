@@ -158,7 +158,8 @@ module.exports = (app) => {
                     return res.send({
                         success: true,
                         message: 'valid sign in',
-                        token: doc._id
+                        token: doc._id,
+                        userId: userSession.userId
                     })
                 })
         })
@@ -243,13 +244,6 @@ module.exports = (app) => {
             description,
             uniqueId
         } = body;
-        // let {
-        //     email
-        // } = body;
-        console.log('body:', body)
-        
-
-        // console.log('imageLink: ' + imageLink)
 
         if (!link) {
             return res.send({
@@ -258,70 +252,60 @@ module.exports = (app) => {
             })
         };
 
+        const newArticle = new Articles()
 
-        // Articles.updateOne({
-        //     link: link,
-        //     title: body.title,
-        //     imageLink: body.imageLink,
-        //     uniqueId: uniqueId,
-        // },
-        
-                // if (err) {
-                //     return res.send({
-                //         success: false,
-                //         message: 'You already saved this article!'
-                //     })
-                // }
-                // else if (previousUsers.length > 0) {
-                //     return res.send({
-                //         success: false,
-                //         message: 'Error: Account already exists'
-                //     })
-                // }
+        newArticle.link = link;
+        newArticle.title = title;
+        newArticle.imageLink = imageLink;
+        newArticle.description = description;
+        newArticle.uniqueId = uniqueId
 
-                // save new user
-                const newArticle = new Articles()
+        newArticle.save((err, user) => {
+            if (err) {
+                return res.send({
+                    success: false,
+                    message: 'Error: Server error'
+                })
+            }
+            return res.send({
+                success: true,
+                message: 'Article saved!'
+            });
+        });
 
-                newArticle.link = link;
-                newArticle.title = title;
-                newArticle.imageLink = imageLink;
-                newArticle.description = description;
-                newArticle.uniqueId = uniqueId
-
-                newArticle.save((err, user) => {
-                    if (err) {
-                        return res.send({
-                            success: false,
-                            message: 'Error: Server error'
-                        })
-                    }
-                    return res.send({
-                        success: true,
-                        message: 'Article saved!'
-                    });
-                });
-        
     });
 
     // Bring articles back to front end
-    
-    app.post('/api/appendarticle', (req, res) => {
-        // const { body } = req;
-        // const {
-        //         link,
-        // } = body;
 
-        
-       
-        // console.log('body:', body)
+    app.post('/api/appendarticle', (req, res) => {
 
         Articles
-        .find(req.query)
-        // .sort({link})
-        .then(Articles => res.json(Articles))
-        .catch(err => res.status(422).json(err))
+            .find(req.query)
+            // .sort({link})
+            .then(Articles => res.json(Articles))
+            .catch(err => res.status(422).json(err))
         // console.log(res)
-        
+
     });
+
+    // app.post('/api/deletearticle', (req, res) => {
+    //     // const { body } = req;
+    //     // const {
+    //     //         link,
+    //     // } = body;
+
+
+
+    //     // console.log('body:', body)
+
+    //     Articles
+    //     .find(req.query)
+    //     // .sort({link})
+    //     .then(Articles => Articles.remove())
+    //     .then(Articles => res.json(Articles))
+    //     .catch(err => res.status(422).json(err))
+    //     // console.log(res)
+
+    // });
 
 };

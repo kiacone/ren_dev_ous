@@ -5,16 +5,9 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 
-// const cheerio = require('react-native-cheerio')
-
 const cheerio = require("cheerio");
 const request = require("request");
 
-const imageStyle = {
-  height: '200px',
-  width: '200px',
-  padding: '2px'
-}
 
 const descriptionTextStyle = {
   color: 'black',
@@ -38,7 +31,6 @@ class Home extends Component {
       signUpLastName: '',
       signUpEmail: '',
       signUpPassword: '',
-      dashboad: '',
       addLink: '',
       results: [],
       appendArticles: []
@@ -61,9 +53,9 @@ class Home extends Component {
 
     this.onSignIn = this.onSignIn.bind(this)
     this.onSignUp = this.onSignUp.bind(this)
-    this.onAddLink = this.onAddLink.bind(this)
+    // this.onAddLink = this.onAddLink.bind(this)
     this.logout = this.logout.bind(this)
-    console.log(this)
+    // this.deleteFromDb = this.deleteFromDb.bind(this)
   }
 
   componentDidMount() {
@@ -211,6 +203,7 @@ class Home extends Component {
       .then(json => {
         console.log('json', json)
         if (json.success) {
+          console.log(json)
           setInStorage('the_main_app', { token: json.token })
           this.setState({
             signInError: json.message,
@@ -218,7 +211,10 @@ class Home extends Component {
             signInPassword: '',
             signInEmail: '',
             token: json.token,
+            userId: json.userId
           })
+          this.props.history.push('/helloworld/' + json.userId)
+
         } else {
           this.setState({
             signInError: json.message,
@@ -229,75 +225,115 @@ class Home extends Component {
     this.renderArticles()
 
   }
+  
+  // Grabs link, scrapes and pushes to results array
+  // onAddLink() {
+  //   // grab state
+  //   const {
+  //     addLink,
+  //     // token,
+  //     results
+  //   } = this.state;
 
-  onAddLink() {
-    // grab state
-    const {
-      addLink,
-      // token,
-      results
-    } = this.state;
+  //   const self = this
 
-    const self = this
+  //   // console.log("the article is: ", addLink)
 
+  //   function checkLink() {
+  //     var str = addLink;
 
+  //     if (str.includes("youtube")) {
+  //       request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
 
+  //         var $ = cheerio.load(html);
 
+  //         $("body").each(function (i, body) {
 
-    console.log("the article is: ", addLink)
+  //           var $ = cheerio.load(body);
+  //           var title = $('yt-formatted-string').text()
+  //           // var image = $('meta[property="og:image"]').attr('content');
+  //           // var description = $('meta[property="og:description"]').attr('content');
 
-    // Make a request call to grab the HTML body from the site of your choice
-    request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
+  //           // Save these results in an object that we'll push into the results array we defined earlier
+  //           // results.push({
+  //           // title
+  //           // });
 
-      // Load the HTML into cheerio and save it to a variable
-      // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-      var $ = cheerio.load(html);
+  //           // results.push({
+  //           //   image
+  //           //   });
 
-      // An empty array to save the data that we'll scrape
+  //           //   results.push({
+  //           //     description
+  //           //     });
 
-      // Select each element in the HTML body from which you want information.
-      // NOTE: Cheerio selectors function similarly to jQuery's selectors,
-      // but be sure to visit the package's npm page to see how it works
-      $("head").each(function(i, body) {
-    
-        var $ = cheerio.load(body);
-        var title = $('meta[property="og:title"]').attr('content');
-        var image = $('meta[property="og:image"]').attr('content');
-        var description = $('meta[property="og:description"]').attr('content');
-    
-        // Save these results in an object that we'll push into the results array we defined earlier
-        results.push({
-        title
-        });
+  //           console.log('TITLE: ' + title)
+  //         });
+  //         // Log the results once you've looped through each of the elements found with cheerio
 
-        results.push({
-          image
-          });
-
-          results.push({
-            description
-            });
-      });
-      // Log the results once you've looped through each of the elements found with cheerio
-
-      console.log('--------------------------------------------');
-      console.log('TITLE: ' + results[0].title)
-      console.log('IMAGE: ' + results[1].image);
-      console.log('IMAGE: ' + results[2].description);
-      console.log('--------------------------------------------');
-      self.postToDb()
-    })
-
-  }
+  //         // console.log('--------------------------------------------');
+  //         // console.log('TITLE: ' + results[0].title)
+  //         // console.log('IMAGE: ' + results[1].image);
+  //         // console.log('IMAGE: ' + results[2].description);
+  //         // console.log('--------------------------------------------');
+  //         // self.postToDb()
+  //       })
+  //     }
+  //     else {
 
 
-  // console.log(this.state)
-  // console.log(results)
+  //       // Make a request call to grab the HTML body from the site of your choice
+  //       request("https://cors-anywhere.herokuapp.com/" + addLink, function (error, response, html) {
+
+  //         // Load the HTML into cheerio and save it to a variable
+  //         // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+  //         var $ = cheerio.load(html);
+
+  //         // An empty array to save the data that we'll scrape
+
+  //         // Select each element in the HTML body from which you want information.
+  //         // NOTE: Cheerio selectors function similarly to jQuery's selectors,
+  //         // but be sure to visit the package's npm page to see how it works
+  //         $("head").each(function (i, body) {
+
+  //           var $ = cheerio.load(body);
+  //           var title = $('meta[property="og:title"]').attr('content');
+  //           var image = $('meta[property="og:image"]').attr('content');
+  //           var description = $('meta[property="og:description"]').attr('content');
+
+  //           // Save these results in an object that we'll push into the results array we defined earlier
+  //           const altImage = "https://giphy.com/gifs/internet-google-chrone-9J7tdYltWyXIY"
+
+  //           results.push({
+  //             title
+  //           });
 
 
+  //           results.push({
+  //             image
+  //           })
+
+
+  //           results.push({
+  //             description
+  //           });
+  //         });
+  //         // Log the results once you've looped through each of the elements found with cheerio
+
+  //         console.log('--------------------------------------------');
+  //         console.log('TITLE: ' + results[0].title)
+  //         console.log('IMAGE: ' + results[1].image);
+  //         console.log('DESCRIPTION: ' + results[2].description);
+  //         console.log('--------------------------------------------');
+  //         self.postToDb()
+  //       })
+  //     }
+  //   }
+
+  //   checkLink()
+  // }
 
   // post request to backend
-
   postToDb() {
 
     const {
@@ -346,7 +382,7 @@ class Home extends Component {
 
   }
 
-
+  // Bring articles back to the frontend and display on client device
   renderArticles() {
     // grab state
     // let {
@@ -366,13 +402,13 @@ class Home extends Component {
         // console.log('this json!!!!!! json', json)
         // appendArticles = json
         // json = JSON.stringify(json)
-        console.log('here!!!!' + json)
+        // console.log('here!!!!' + json)
         if (json) {
 
-          console.log("success")
+          // console.log("success")
           this.setState({ appendArticles: json })
 
-          console.log(this.state)
+          // console.log(this.state)
         } else {
           this.setState({
             // signUpError: json.message,
@@ -386,11 +422,10 @@ class Home extends Component {
     // console.log(this.state)
 
 
-    console.log("articles: ", this.state)
+    // console.log("articles: ", this.state)
   }
 
-
-
+  // End user session
   logout() {
     this.setState({
       isLoading: true,
@@ -428,6 +463,7 @@ class Home extends Component {
     }
   }
 
+  // Display page
   render() {
     const {
       isLoading,
@@ -546,7 +582,7 @@ class Home extends Component {
                   value={addLink}
                   onChange={this.onTextBoxChangeAddLink} />
                 <br /><br />
-                <button className='btn' onClick={this.onAddLink}>Save Article</button>
+                {/* <button className='btn' onClick={this.onAddLink}>Save Article</button> */}
                 <br /><br />
                 {this.state.appendArticles.slice(0).reverse().map(article =>
 
@@ -554,14 +590,14 @@ class Home extends Component {
                     <div className='col s6 m3'>
                       <div className='card'>
                         <div className='card-image'>
-                          <img src={article.imageLink} alt="placeholder" />
+                          <img src={article.imageLink || "https://media.giphy.com/media/9J7tdYltWyXIY/giphy.gif"} alt="placeholder" />
                           <span className='card-title'>{article.title}</span>
                         </div>
                         <div className='card-content'>
                           <p style={descriptionTextStyle}>{article.description}</p>
                         </div>
                         <div className='card-action'>
-                          <a href={article.link} target="_blank">Read Article</a> | <a href='#'>Delete Article</a>
+                          <a href={article.link} target="_blank">Read Article</a> | <a onClick={this.deleteFromDb}>Delete Article</a>
                         </div>
                         {/* <div className='card-action'>
                           <a href='#'>Delete Article</a>
