@@ -4,6 +4,7 @@ import {
   setInStorage,
   getFromStorage,
 } from '../../utils/storage';
+import {Redirect} from 'react-router-dom'
 
 
 const cheerio = require("cheerio");
@@ -28,6 +29,7 @@ class HelloWorld extends Component {
       addLink: '',
       results: [],
       appendArticles: [],
+      toHome: false,
       currentUser: props.match.params.id
 
     };
@@ -304,6 +306,7 @@ class HelloWorld extends Component {
               signInError: '',
               // signUpError: '',
               // could also be token: token
+              toHome: true,
               isLoading: false,
             })
             
@@ -319,6 +322,7 @@ class HelloWorld extends Component {
       this.setState({
         isLoading: false,
         signInError: '',
+        toHome: true
         // signUpError: '',
       })
     }
@@ -335,7 +339,9 @@ class HelloWorld extends Component {
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
-
+    if (this.state.toHome === true) {
+      return <Redirect to = "/" />
+    }
     if (!token) {
       return (
         <div className='container'>
@@ -382,6 +388,14 @@ class HelloWorld extends Component {
                 <br /><br />
                 <button className='btn' onClick={this.onAddLink}>Save Article</button>
                 <br /><br />
+                </div>
+                </div>
+                </div>
+                </div>
+                <div className="row">
+          <div className="col m6">
+                <div className="card blue-grey darken-1">
+              <div className="card-content white-text">
                 {this.state.appendArticles.slice(0).reverse().map(article =>
 
                   <div className='row'>
