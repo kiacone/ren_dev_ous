@@ -61,6 +61,7 @@ class Dashboard extends Component {
         isLoading: false,
       })
     }
+    this.renderArticles()
   }
 
   onTextBoxChangeAddLink(event) {
@@ -233,10 +234,14 @@ class Dashboard extends Component {
       headers: {
         'Content-Type': "application/json"
       },
+      body: JSON.stringify({
+        uniqueId: this.state.currentUser
+      }),
     })
     .then(res => res.json())
     .then(json => {
       if (json) {
+        console.log("articles returned" + json)
         this.setState({ appendArticles: json })
       } else {
         this.setState({

@@ -4,7 +4,7 @@ import {
   setInStorage,
   getFromStorage,
 } from '../../utils/storage';
-import { Redirect } from 'react-router-dom'
+// import { Redirect } from 'react-router-dom'
 import Header from "../../components/Header"
 
 class SignIn extends Component {
@@ -16,7 +16,8 @@ class SignIn extends Component {
       token: '',
       signInError: '',
       signInEmail: '',
-      signInPassword: ''
+      signInPassword: '',
+      
     };
 
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
@@ -164,7 +165,8 @@ class SignIn extends Component {
 
     return (
 
-      <Redirect to='/signin' />
+      // <Redirect to='/signin' />
+      <h1>some text</h1>
 
     );
   }
