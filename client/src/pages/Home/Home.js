@@ -5,8 +5,8 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 import { Redirect } from 'react-router-dom'
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
 
 class Home extends Component {
   constructor(props) {
@@ -15,18 +15,18 @@ class Home extends Component {
     this.state = {
       isLoading: true,
       token: '',
-      signInError: '',
-      signInEmail: '',
-      signInPassword: '',
-      toDashboard: false,
-      addLink: '',
-      results: [],
-      appendArticles: []
+      signUpError: '',
+      signUpFirstName: '',
+      signUpLastName: '',
+      signUpEmail: '',
+      signUpPassword: ''
     };
 
-    this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
-    this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
-    this.onSignIn = this.onSignIn.bind(this)
+    this.onTextBoxChangeSignUpEmail = this.onTextBoxChangeSignUpEmail.bind(this);
+    this.onTextBoxChangeSignUpPassword = this.onTextBoxChangeSignUpPassword.bind(this);
+    this.onTextBoxChangeSignUpFirstName = this.onTextBoxChangeSignUpFirstName.bind(this);
+    this.onTextBoxChangeSignUpLastName = this.onTextBoxChangeSignUpLastName.bind(this);
+    this.onSignUp = this.onSignUp.bind(this)
   }
 
   componentDidMount() {
@@ -34,8 +34,8 @@ class Home extends Component {
 
     if (obj && obj.token) {
       const { token } = obj
-      
-      // verify token
+
+      // Verify token
       fetch('/api/verify?token=' + token)
         .then(res => res.json())
         .then(json => {
@@ -57,147 +57,153 @@ class Home extends Component {
     }
   }
 
-  onTextBoxChangeSignInEmail(event) {
+  onTextBoxChangeSignUpEmail(event) {
     this.setState({
-      signInEmail: event.target.value
+      signUpEmail: event.target.value
     });
   }
 
-  onTextBoxChangeSignInPassword(event) {
+  onTextBoxChangeSignUpPassword(event) {
     this.setState({
-      signInPassword: event.target.value
+      signUpPassword: event.target.value
     });
   }
 
-  onSignIn() {
-    // post request to backend
-    // grab state
+  onTextBoxChangeSignUpFirstName(event) {
+    this.setState({
+      signUpFirstName: event.target.value
+    });
+  }
+
+  onTextBoxChangeSignUpLastName(event) {
+    this.setState({
+      signUpLastName: event.target.value
+    });
+  }
+
+  onSignUp() {
+    
+    // Get state
     const {
-      signInEmail,
-      signInPassword,
+      signUpFirstName,
+      signUpLastName,
+      signUpEmail,
+      signUpPassword,
     } = this.state;
 
     this.setState({
       isLoading: true,
     })
 
-    // post request to backend
-    fetch('/api/signin', {
+    // Post request to backend
+    fetch('/api/signup', {
       method: 'POST',
       headers: {
         'Content-Type': "application/json"
       },
       body: JSON.stringify({
-        email: signInEmail,
-        password: signInPassword
+        firstName: signUpFirstName,
+        lastName: signUpLastName,
+        email: signUpEmail,
+        password: signUpPassword
       }),
     }).then(res => res.json())
       .then(json => {
         console.log('json', json)
         if (json.success) {
-          setInStorage('the_main_app', { token: json.token })
           this.setState({
-            signInError: json.message,
+            signUpError: json.message,
             isLoading: false,
-            signInPassword: '',
-            signInEmail: '',
-            token: json.token,
-            toDashboard: true
+            signUpEmail: '',
+            signUpPassword: '',
+            signUpFirstName: '',
+            signUpLastName: ''
           })
         } else {
           this.setState({
-            signInError: json.message,
+            signUpError: json.message,
             isLoading: false,
           })
         }
       })
-      this.renderArticles();
   }
 
-  renderArticles() {
-    fetch('/api/appendarticle', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
-    })
-      .then(res => res.json())
-      .then(json => {
-        if (json) {
-          console.log("success")
-          this.setState({ appendArticles: json })
-          console.log(this.state)
-        } else {
-          this.setState({
-            // signUpError: json.message,
-            isLoading: false,
-          })
-        }
-      })
-    console.log("articles: ", this.state)
-  }
-
+  // Display page
   render() {
     const {
       isLoading,
       token,
-      signInError,
-      signInEmail,
-      signInPassword,
-      // uniqueId
+      signUpFirstName,
+      signUpLastName,
+      signUpEmail,
+      signUpPassword,
+      signUpError,
     } = this.state;
 
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
 
-    if (this.state.toDashboard === true) {
-      return <Redirect to='/dashboard' />
+    if (this.state.toHome === true) {
+      return <Redirect to='/signin' />
     }
-
+    
     if (!token) {
-
       return (
-        <div>
-        <Header/>
+
+      <div>
+        <Header />
         <div className='container'>
           <div className="row">
             <div className="col s12">
               <div className="card blue-grey darken-1">
                 <div className="card-content white-text">
                   {
-                    (signInError) ? (
-                      <p>{signInError}</p>
+                    (signUpError) ? (
+                      <p>{signUpError}</p>
                     ) : (null)
                   }
-                  <span className="card-title">Sign In</span>
+                  <span className="card-title">Sign Up</span>
                   <input
-                    type="email"
-                    placeholder="Email"
-                    value={signInEmail}
-                    onChange={this.onTextBoxChangeSignInEmail} />
+                  type="text"
+                  placeholder="First Name"
+                  value={signUpFirstName}
+                  onChange={this.onTextBoxChangeSignUpFirstName} />
                   <br /><br />
                   <input
-                    type="password"
-                    placeholder="Password"
-                    value={signInPassword}
-                    onChange={this.onTextBoxChangeSignInPassword} />
+                  type="text"
+                  placeholder="Last Name"
+                  value={signUpLastName}
+                  onChange={this.onTextBoxChangeSignUpLastName} />
                   <br /><br />
-                  <button className='btn' onClick={this.onSignIn}>Sign In</button>
+                  <input
+                  type="email"
+                  placeholder="Email"
+                  value={signUpEmail}
+                  onChange={this.onTextBoxChangeSignUpEmail} />
+                  <br /><br />
+                  <input
+                  type="password"
+                  placeholder="Password"
+                  value={signUpPassword}
+                  onChange={this.onTextBoxChangeSignUpPassword} />
+                  <br /><br />
+                  <button className='btn' onClick={this.onSignUp}>Sign Up</button>
                 </div>
               </div>
             </div>
-            </div>
           </div>
-          <Footer/>
-          </div>
-      )
+        </div>
+        <Footer />
+      </div>
 
+      )
     }
-    
     return (
-      "There is a token."
-    )
+
+      <Redirect to='/' />
+
+    );
   }
 }
 

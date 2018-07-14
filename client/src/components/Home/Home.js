@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import 'whatwg-fetch';
-import { getFromStorage } from '../../utils/storage';
-import { Redirect } from 'react-router-dom'
-import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import {
+  setInStorage,
+  getFromStorage,
+} from '../../utils/storage';
+import Header from "../../components/Header"
+import Footer from "../../components/Footer"
 
-class SignUp extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: true,
-      toHome: false,
       token: '',
       signUpError: '',
       signUpFirstName: '',
@@ -19,18 +20,12 @@ class SignUp extends Component {
       signUpEmail: '',
       signUpPassword: ''
     };
-    
+
     this.onTextBoxChangeSignUpEmail = this.onTextBoxChangeSignUpEmail.bind(this);
-
     this.onTextBoxChangeSignUpPassword = this.onTextBoxChangeSignUpPassword.bind(this);
-
     this.onTextBoxChangeSignUpFirstName = this.onTextBoxChangeSignUpFirstName.bind(this);
-
     this.onTextBoxChangeSignUpLastName = this.onTextBoxChangeSignUpLastName.bind(this);
-
     this.onSignUp = this.onSignUp.bind(this)
-    
-    // console.log(this)
   }
 
   componentDidMount() {
@@ -38,14 +33,14 @@ class SignUp extends Component {
 
     if (obj && obj.token) {
       const { token } = obj
-      // verify token
+
+      // Verify token
       fetch('/api/verify?token=' + token)
         .then(res => res.json())
         .then(json => {
           if (json.success) {
             this.setState({
               token,
-              // could also be token: token
               isLoading: false,
             })
           } else {
@@ -58,7 +53,6 @@ class SignUp extends Component {
       this.setState({
         isLoading: false,
       })
-      
     }
   }
 
@@ -87,7 +81,8 @@ class SignUp extends Component {
   }
 
   onSignUp() {
-    // grab state
+    
+    // Get state
     const {
       signUpFirstName,
       signUpLastName,
@@ -99,7 +94,7 @@ class SignUp extends Component {
       isLoading: true,
     })
 
-    // post request to backend
+    // Post request to backend
     fetch('/api/signup', {
       method: 'POST',
       headers: {
@@ -122,7 +117,6 @@ class SignUp extends Component {
             signUpPassword: '',
             signUpFirstName: '',
             signUpLastName: '',
-            toHome: true,
           })
         } else {
           this.setState({
@@ -133,6 +127,7 @@ class SignUp extends Component {
       })
   }
 
+  // Display page
   render() {
     const {
       isLoading,
@@ -147,69 +142,66 @@ class SignUp extends Component {
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
-
-    if (this.state.toHome === true) {
-      return <Redirect to='/' />
-    }
-
+    
     if (!token) {
+      return (
 
-    return (
       <div>
-      <Header/>
-    <div className='container'>
-      <div className="row">
-        <div className="col s12">
-          <div className="card blue-grey darken-1">
-            <div className="card-content white-text">
-              {
-                (signUpError) ? (
-                  <p>{signUpError}</p>
-                ) : (null)
-              }
-              <span className="card-title">Sign Up</span>
-              <input
-                type="text"
-                placeholder="First Name"
-                value={signUpFirstName}
-                onChange={this.onTextBoxChangeSignUpFirstName} />
-              <br /><br />
-              <input
-                type="text"
-                placeholder="Last Name"
-                value={signUpLastName}
-                onChange={this.onTextBoxChangeSignUpLastName} />
-              <br /><br />
-              <input
-                type="email"
-                placeholder="Email"
-                value={signUpEmail}
-                onChange={this.onTextBoxChangeSignUpEmail} />
-              <br /><br />
-              <input
-                type="password"
-                placeholder="Password"
-                value={signUpPassword}
-                onChange={this.onTextBoxChangeSignUpPassword} />
-              <br /><br />
-              <button className='btn' onClick={this.onSignUp}>Sign Up</button>
+        <Header />
+        <div className='container'>
+          <div className="row">
+            <div className="col s12">
+              <div className="card blue-grey darken-1">
+                <div className="card-content white-text">
+                  {
+                    (signUpError) ? (
+                      <p>{signUpError}</p>
+                    ) : (null)
+                  }
+                  <span className="card-title">Sign Up</span>
+                  <input
+                  type="text"
+                  placeholder="First Name"
+                  value={signUpFirstName}
+                  onChange={this.onTextBoxChangeSignUpFirstName} />
+                  <br /><br />
+                  <input
+                  type="text"
+                  placeholder="Last Name"
+                  value={signUpLastName}
+                  onChange={this.onTextBoxChangeSignUpLastName} />
+                  <br /><br />
+                  <input
+                  type="email"
+                  placeholder="Email"
+                  value={signUpEmail}
+                  onChange={this.onTextBoxChangeSignUpEmail} />
+                  <br /><br />
+                  <input
+                  type="password"
+                  placeholder="Password"
+                  value={signUpPassword}
+                  onChange={this.onTextBoxChangeSignUpPassword} />
+                  <br /><br />
+                  <button className='btn' onClick={this.onSignUp}>Sign Up</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <Footer />
       </div>
-    </div>
-    <Footer/>
-    </div>
-    )
-  }
 
+      )
+    }
     return (
-      "There is a token."
-    )
 
+    <div className='container'>
+      <h1 className='center-align'>There is NOT a token</h1>
+    </div>
 
-
+    );
   }
 }
 
-export default SignUp;
+export default Home;
