@@ -5,9 +5,35 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 import { Redirect } from 'react-router-dom'
-import Header from "../../components/Header"
+import Header from "../../components/Header/Header.jsx"
 
-class SignIn extends Component {
+// **************** DANGER ZONE *********************************************
+// @material-ui/core components
+import withStyles from "@material-ui/core/styles/withStyles";
+import InputAdornment from "@material-ui/core/InputAdornment";
+// @material-ui/icons
+import Email from "@material-ui/icons/Email";
+import LockOutline from "@material-ui/icons/LockOutline";
+import People from "@material-ui/icons/People";
+// core components
+// import Header from "../../components/Header/Header.jsx";
+import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
+import Footer from "../../components/Footer/Footer.jsx";
+import GridContainer from "../../components/Grid/GridContainer.jsx";
+import GridItem from "../../components/Grid/GridItem.jsx";
+import Button from "../../components/CustomButtons/Button.jsx";
+import Card from "../../components/Card/Card.jsx";
+import CardBody from "../../components/Card/CardBody.jsx";
+import CardHeader from "../../components/Card/CardHeader.jsx";
+import CardFooter from "../../components/Card/CardFooter.jsx";
+import CustomInput from "../../components/CustomInput/CustomInput.jsx";
+
+import loginPageStyle from "../../assets/jss/material-kit-react/views/loginPage.jsx";
+
+import image from "../../assets/img/bg7.jpg";
+// **************** END OF DANGER ZONE ***************************************
+
+class SignIn extends React.Component {
   constructor(props) {
     super(props);
 
@@ -16,17 +42,31 @@ class SignIn extends Component {
       token: '',
       signInError: '',
       signInEmail: '',
-      signInPassword: ''
+      signInPassword: '',
+      cardAnimaton: "cardHidden"
     };
 
     this.onTextBoxChangeSignInEmail = this.onTextBoxChangeSignInEmail.bind(this);
     this.onTextBoxChangeSignInPassword = this.onTextBoxChangeSignInPassword.bind(this);
     this.onSignIn = this.onSignIn.bind(this)
   }
-
+  componentDidMount() {
+    
+  }
   componentDidMount() {
     const obj = getFromStorage('the_main_app')
 
+    // ********** Card Animation **********
+    // we add a hidden class to the card and after 700 ms we delete it and the transition appears
+    setTimeout(
+      function() {
+        this.setState({ cardAnimaton: "" });
+      }.bind(this),
+      700
+    );
+    // FIXME: May need to integrate into below logic..
+    // **********************
+    
     if (obj && obj.token) {
       const { token } = obj
       // verify token
@@ -118,7 +158,9 @@ class SignIn extends Component {
       token,
       signInError,
       signInEmail,
-      signInPassword
+      signInPassword,
+      classes, 
+      ...rest
     } = this.state;
 
     if (isLoading) {
@@ -128,7 +170,8 @@ class SignIn extends Component {
     if (!token) {
       return (
         <div>
-           <Header />
+          <Header />
+
         <div className='container'>
           <div className="row">
             <div className="col s12">
@@ -156,9 +199,10 @@ class SignIn extends Component {
                 </div>
               </div>
             </div>
-            </div>
           </div>
         </div>
+        <Footer />
+      </div>
       )
     }
 
@@ -170,4 +214,4 @@ class SignIn extends Component {
   }
 }
 
-export default SignIn;
+export default withStyles(loginPageStyle)(SignIn);

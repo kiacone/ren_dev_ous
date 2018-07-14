@@ -4,7 +4,7 @@ import {
   setInStorage,
   getFromStorage,
 } from '../../utils/storage';
-import Header from "../../components/Header"
+import Header from "../../components/Header/Header.jsx"
 import Footer from "../../components/Footer"
 
 class Home extends Component {
