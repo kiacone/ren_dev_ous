@@ -4,7 +4,7 @@ import {
   setInStorage,
   getFromStorage,
 } from '../../utils/storage';
-import Header from "../../components/Header"
+import HeaderHome from "../../components/HeaderHome"
 import Footer from "../../components/Footer"
 
 class Home extends Component {
@@ -147,7 +147,7 @@ class Home extends Component {
       return (
 
       <div>
-        <Header />
+        <HeaderHome />
         <div className='container'>
           <div className="row">
             <div className="col s12">
