@@ -5,7 +5,7 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 // import { Redirect } from 'react-router-dom'
-import HeaderHome from "../../components/HeaderHome"
+import Header from "../../components/Header"
 
 class SignIn extends Component {
   constructor(props) {
@@ -129,7 +129,7 @@ class SignIn extends Component {
     if (!token) {
       return (
         <div>
-           <HeaderHome />
+           <Header />
         <div className='container'>
           <div className="row">
             <div className="col s12">
