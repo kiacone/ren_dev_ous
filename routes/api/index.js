@@ -262,9 +262,15 @@ module.exports = (app) => {
 
   // Bring articles back to front end
   app.post('/api/appendarticle', (req, res) => {
+
+    console.log(req.body)
+
     Articles
-      .find(req.query)
-      .then(Articles => res.json(Articles))
+      .find( { uniqueId: req.body.uniqueId } )
+      .then(Articles => {
+        // console.log("Articles" + Articles)
+        return res.json(Articles)
+      })
       .catch(err => res.status(422).json(err))
   });
 };
