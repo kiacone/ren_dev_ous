@@ -155,7 +155,16 @@ class Home extends Component {
         <Header />
         <div className='container'>
           <div className="row">
-            <div className="col s12">
+            
+            <div className="col s6">
+              <div className="card blue-grey darken-1">
+                <div className="card-content white-text">
+                  <h1>Hello World!</h1>
+                </div>
+              </div>
+            </div>
+            
+            <div className="col s6">
               <div className="card blue-grey darken-1">
                 <div className="card-content white-text">
                   {
@@ -163,7 +172,7 @@ class Home extends Component {
                       <p>{signUpError}</p>
                     ) : (null)
                   }
-                  <span className="card-title">Sign Up</span>
+                  <span className="card-title">Sign Up Beaches!</span>
                   <input
                   type="text"
                   placeholder="First Name"
@@ -191,8 +200,9 @@ class Home extends Component {
                   <button className='btn' onClick={this.onSignUp}>Sign Up</button>
                 </div>
               </div>
-            </div>
-          </div>
+            </div> 
+          </div> {/*End of row*/}
+
         </div>
         <Footer />
       </div>
