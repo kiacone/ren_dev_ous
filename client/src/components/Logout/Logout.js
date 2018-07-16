@@ -5,8 +5,6 @@ import {
 } from '../../utils/storage';
 import { Redirect } from 'react-router-dom'
 
-import CustomButtons from "../../components/CustomButtons/Button.jsx";
-
 class Logout extends Component {
   constructor(props) {
     super(props);
@@ -104,9 +102,9 @@ class Logout extends Component {
     if (token) {
 
       return (
-        <CustomButtons color='primary' onClick={this.logout}>
-          Logout
-        </CustomButtons>
+        <div>
+          <button className='btn' onClick={this.logout}>Logout</button>
+      </div>
       )
 
     }
