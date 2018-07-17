@@ -8,7 +8,7 @@ Ren<dev>ous is built for full stack developers, UI designers, front end develope
 
 **Results** - Using a variety of technologies we’ve learned in class so far, we were able to create an MVP version of Ren<dev>ous. This includes a full stack React app using a Mongo database and hosted on Heroku.  
 
-[View Keynote](ren_dev_ous/ren<dev>ous.pdf)
+[View Keynote](https://github.com/kiacone/ren_dev_ous/blob/master/ren%3Cdev%3Eous.pdf)
 
 ### Project Built With
 
