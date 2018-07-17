@@ -1,4 +1,4 @@
-# Ren<dev>ous
+# Ren`<dev>`ous
 
 Ren<dev>ous is built for full stack developers, UI designers, front end developers, UX designers, web developers or anyone within the web community. This app provides an easy way to save design and development articles you want to read later.
 
@@ -12,13 +12,15 @@ Ren<dev>ous is built for full stack developers, UI designers, front end develope
 
 ### Project Built With
 
-React | HTML5 | CSS3 | JavaScript | Material UI | Node/Express | MongoDB & Mongoose ORM | Heroku
+React | HTML5 | CSS3 | JavaScript | Material UI | MongoDB & Mongoose ORM | Heroku
 
 **Packages Used**
 * Cheerio
 * React Router
 * Axios
-* 
+* Bcrypt
+* Body-parser
+* Express
 
 ### Meet the team!
 
