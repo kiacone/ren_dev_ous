@@ -1,12 +1,12 @@
 # Ren`<dev>`ous
 
-Ren<dev>ous is built for full stack developers, UI designers, front end developers, UX designers, web developers or anyone within the web community. This app provides an easy way to save design and development articles you want to read later.
+Ren`<dev>`ous is built for full stack developers, UI designers, front end developers, UX designers, web developers or anyone within the web community. This app provides an easy way to save design and development articles you want to read later.
 
 [View the Project](https://ren-dev-ous.herokuapp.com/)
 
 ### The Details
 
-**Results** - Using a variety of technologies we’ve learned in class so far, we were able to create an MVP version of Ren<dev>ous. This includes a full stack React app using a Mongo database and hosted on Heroku.  
+**Results** - Using a variety of technologies we’ve learned in class so far, we were able to create an MVP version of Ren`<dev>`ous. This includes a full stack React app using a Mongo database and hosted on Heroku.  
 
 [View Keynote](https://github.com/kiacone/ren_dev_ous/blob/master/ren%3Cdev%3Eous.pdf)
 
