@@ -72,6 +72,13 @@ const headerStyle = theme => ({
     backgroundColor: dangerColor,
     color: "#FFFFFF",
     ...defaultBoxShadow
+  },
+  img: {
+    // width: "179px",
+    display: "inline-block",
+    maxHeight: "40px",
+    marginLeft: "60px",
+    marginRight: "15px"
   }
 });
 

@@ -11,8 +11,12 @@ import Footer from "../../components/Footer"
 import { withStyles } from '@material-ui/core/styles';
 import homePageStyle from "../../assets/jss/material-dashboard-react/layouts/home.jsx";
 import image from "../../assets/img/sidebar-5.jpg";
+import logo from "../../assets/img/rdv_logo.png";
 // import { Button } from '../../../../node_modules/@material-ui/core';
 import Button from "../../components/CustomButtons/Button.jsx";
+
+// import HeaderLinks from "../../components/Header/HeaderLinks.jsx";
+// const dashboardRoutes = [];
 
 class Home extends Component {
   constructor(props) {
@@ -146,8 +150,8 @@ class Home extends Component {
       signUpError,
     } = this.state;
 
-    const { classes } = this.props;
-
+    // const { classes } = this.props;
+    const { classes, ...rest } = this.props;
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
@@ -160,7 +164,18 @@ class Home extends Component {
       return (
 
       <div>
-        <Header />
+        {/* <Header /> */}
+        <Header
+          color="transparent"
+          logo={logo}
+          // rightLinks={<HeaderLinks />}
+          fixed
+          changeColorOnScroll={{
+            height: 400,
+            color: "white"
+          }}
+          {...rest}
+        />
         <div className={classes.container} 
         style={{
           backgroundImage: "url(" + image + ")",
@@ -210,6 +225,7 @@ class Home extends Component {
                     <Button className={classes.button} onClick={this.onSignUp}>Sign Up
                       <i class="material-icons right">send</i>
                     </Button>
+                    <a href="/signin"><h4>Or Sign In</h4></a>
                   </div>
                 </div>
               </div>

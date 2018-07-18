@@ -5,7 +5,10 @@ import {
   getFromStorage,
 } from '../../utils/storage';
 // import { Redirect } from 'react-router-dom'
-import Header from "../../components/Header"
+import Header from "../../components/Header";
+import { withStyles } from '@material-ui/core/styles';
+import logo from "../../assets/img/rdv_logo.png";
+
 
 class SignIn extends Component {
   constructor(props) {
@@ -122,6 +125,7 @@ class SignIn extends Component {
       signInPassword
     } = this.state;
 
+    const { classes, ...rest } = this.props;
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
@@ -129,10 +133,19 @@ class SignIn extends Component {
     if (!token) {
       return (
         <div>
-           <Header />
+          <Header
+          color="transparent"
+          logo={logo}
+          fixed
+          changeColorOnScroll={{
+            height: 400,
+            color: "white"
+          }}
+          {...rest}
+        />
         <div className='container'>
           <div className="row">
-            <div className="col s12">
+            <div className="col s6">
               <div className="card blue-grey darken-1">
                 <div className="card-content white-text">
                   {
