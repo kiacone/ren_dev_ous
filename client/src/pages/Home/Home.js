@@ -8,6 +8,12 @@ import { Redirect } from 'react-router-dom'
 import Header from "../../components/Header"
 import Footer from "../../components/Footer"
 
+import { withStyles } from '@material-ui/core/styles';
+import homePageStyle from "../../assets/jss/material-dashboard-react/layouts/home.jsx";
+import image from "../../assets/img/sidebar-5.jpg";
+// import { Button } from '../../../../node_modules/@material-ui/core';
+import Button from "../../components/CustomButtons/Button.jsx";
+
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -140,6 +146,8 @@ class Home extends Component {
       signUpError,
     } = this.state;
 
+    const { classes } = this.props;
+
     if (isLoading) {
       return (<div><p>Loading...</p></div>)
     }
@@ -153,42 +161,56 @@ class Home extends Component {
 
       <div>
         <Header />
-        <div className='container'>
-          <div className="row">
-            <div className="col s12">
-              <div className="card blue-grey darken-1">
-                <div className="card-content white-text">
-                  {
-                    (signUpError) ? (
-                      <p>{signUpError}</p>
-                    ) : (null)
-                  }
-                  <span className="card-title">Sign Up</span>
-                  <input
-                  type="text"
-                  placeholder="First Name"
-                  value={signUpFirstName}
-                  onChange={this.onTextBoxChangeSignUpFirstName} />
-                  <br /><br />
-                  <input
-                  type="text"
-                  placeholder="Last Name"
-                  value={signUpLastName}
-                  onChange={this.onTextBoxChangeSignUpLastName} />
-                  <br /><br />
-                  <input
-                  type="email"
-                  placeholder="Email"
-                  value={signUpEmail}
-                  onChange={this.onTextBoxChangeSignUpEmail} />
-                  <br /><br />
-                  <input
-                  type="password"
-                  placeholder="Password"
-                  value={signUpPassword}
-                  onChange={this.onTextBoxChangeSignUpPassword} />
-                  <br /><br />
-                  <button className='btn' onClick={this.onSignUp}>Sign Up</button>
+        <div className={classes.container} 
+        style={{
+          backgroundImage: "url(" + image + ")",
+          backgroundSize: "cover",
+          backgroundPosition: "top center"
+        }}>
+          <div className={classes.introSpace}>
+            <div className="row">
+              <div className="col s8 white-text">
+                <h1 className="introTitle">Built For Developers</h1>
+                <h4 className="introText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, expedita commodi cum iusto placeat aliquam aperiam qui eligendi minima voluptate voluptatum adipisci tempora animi eos, optio amet, recusandae facilis soluta corrupti quae vitae. Iste dignissimos aliquam debitis. Quo, exercitationem molestiae.</h4>
+              </div>
+
+              <div className="col s4 signUp">
+                <div className="card white">
+                  <div className="card-content black-text center-align">
+                    {
+                      (signUpError) ? (
+                        <p>{signUpError}</p>
+                      ) : (null)
+                    }
+                    <span className="card-title">Sign Up</span>
+                    <input
+                    type="text"
+                    placeholder="First Name"
+                    value={signUpFirstName}
+                    onChange={this.onTextBoxChangeSignUpFirstName} />
+                    <br /><br />
+                    <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={signUpLastName}
+                    onChange={this.onTextBoxChangeSignUpLastName} />
+                    <br /><br />
+                    <input
+                    type="email"
+                    placeholder="Email"
+                    value={signUpEmail}
+                    onChange={this.onTextBoxChangeSignUpEmail} />
+                    <br /><br />
+                    <input
+                    type="password"
+                    placeholder="Password"
+                    value={signUpPassword}
+                    onChange={this.onTextBoxChangeSignUpPassword} />
+                    <br /><br />
+                    <Button className={classes.button} onClick={this.onSignUp}>Sign Up
+                      <i class="material-icons right">send</i>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -207,4 +229,5 @@ class Home extends Component {
   }
 }
 
-export default Home;
+// export default Home;
+export default withStyles(homePageStyle)(Home);
