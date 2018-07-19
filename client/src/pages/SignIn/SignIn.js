@@ -186,7 +186,7 @@ class SignIn extends React.Component {
                         ) : (null)
                       }
                       <CardHeader color="primary" className={classes.cardHeader}>
-                        <h4>Login</h4>
+                        <h2>Login</h2>
                       </CardHeader>
                       <p className={classes.divider}><a href="/">Go back home.</a></p>
                       <CardBody>

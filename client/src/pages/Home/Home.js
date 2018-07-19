@@ -186,7 +186,7 @@ class Home extends Component {
             <div className="row">
               <div className="col s8 white-text">
                 <h1 className="introTitle">Built For Developers</h1>
-                <h4 className="introText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, expedita commodi cum iusto placeat aliquam aperiam qui eligendi minima voluptate voluptatum adipisci tempora animi eos, optio amet, recusandae facilis soluta corrupti quae vitae. Iste dignissimos aliquam debitis. Quo, exercitationem molestiae.</h4>
+                <h3 className="introText">Ren&lt;dev&gt;ous is built for full stack developers, UI designers, front end developers, UX designers, web developers or anyone within the web community. This app provides an easy way to save design and development articles you want to read later.</h3>
               </div>
 
               <div className="col s4 signUp">

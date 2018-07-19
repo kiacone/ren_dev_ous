@@ -61,53 +61,51 @@ function Footer({ ...props }) {
           <List className={classes.list}>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/"
+                href="https://github.com/kiacone"
                 className={classes.block}
                 target="_blank"
               >
-                Creative Tim
+                Kristin Iacone
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/presentation"
+                href="https://github.com/ELark2016"
                 className={classes.block}
                 target="_blank"
               >
-                About us
+                Liz Lark
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="http://blog.creative-tim.com/"
+                href="https://github.com/scottpetersonva"
                 className={classes.block}
                 target="_blank"
               >
-                Blog
+                Scott Peterson
               </a>
             </ListItem>
             <ListItem className={classes.inlineBlock}>
               <a
-                href="https://www.creative-tim.com/license"
+                href="https://github.com/tophersymps"
                 className={classes.block}
                 target="_blank"
               >
-                Licenses
+                Topher Sympson
               </a>
             </ListItem>
           </List>
         </div>
         <div className={classes.right}>
-          &copy; {1900 + new Date().getYear()} , made with{" "}
-          <Favorite className={classes.icon} /> by{" "}
+          &copy; {1900 + new Date().getYear()} , check out the {" "}
           <a
-            href="https://www.creative-tim.com"
+            href="https://github.com/kiacone/ren_dev_ous"
             className={aClasses}
             target="_blank"
           >
-            Creative Tim
-          </a>{" "}
-          for a better web.
+            Repo here!
+          </a>{"   "}
         </div>
       </div>
     </footer>
