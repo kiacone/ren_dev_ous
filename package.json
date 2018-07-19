@@ -17,7 +17,7 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^3.6.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.18.3"
   },
   "dependencies": {
     "@material-ui/core": "^1.4.0",
@@ -28,7 +28,7 @@
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.15.4",
     "if-env": "^1.0.4",
-    "mongoose": "^5.0.17",
+    "mongoose": "^5.2.4",
     "react-native-cheerio": "^1.0.0-rc.4",
     "request": "^2.87.0",
     "yarn.lock": "^0.0.1-security"
